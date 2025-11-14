@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Job {
+  id               String   @id @default(uuid())
+  title            String
+  description      String
+  requirements     String[]
+  responsibilities String[]
+  perks            String[]
+  benefits         String[]
+  companyId        String
+  company          Company  @relation(fields: [companyId], references: [id])
+  locations        Json
+  url              String
+  remotePolicy     String
+  daysPerWeek      Int?
+  techStack        String[]
+  chats            Chat[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Company {
+  id              String   @id @default(uuid())
+  name            String
+  description     String
+  locations       Json
+  url             String
+  logo            String?
+  companySize     String
+  ownershipType   String
+  fundingType     String
+  amountRaised    BigInt?
+  lastRoundLetter String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  jobs            Job[]
+}
+
+model Chat {
+  id        String    @id @default(uuid())
+  jobId     String
+  job       Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  sessionId String
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([jobId, sessionId])
+  @@index([jobId, sessionId])
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([chatId, createdAt])
+}

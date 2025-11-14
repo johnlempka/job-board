@@ -24,3 +24,29 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.font-playfair {
+  font-family: var(--font-playfair), serif;
+}
+
+.font-sans {
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Green accent color theme */
+:root {
+  --accent-green: #059669;
+  --accent-green-light: #10b981;
+  --accent-green-dark: #047857;
+}
+
+/* Enhanced visual effects for accent elements */
+@layer utilities {
+  .accent-glow {
+    box-shadow: 0 0 12px rgba(5, 150, 105, 0.3);
+  }
+
+  .accent-glow-strong {
+    box-shadow: 0 0 20px rgba(5, 150, 105, 0.4);
+  }
+}
