@@ -36,6 +36,7 @@ type JobWithCompany = {
     company: { name: string; logo: string | null };
     locations: JobModel["locations"];
     remotePolicy: JobModel["remotePolicy"];
+    employmentType: JobModel["employmentType"];
     daysPerWeek: number | null;
     techStack: string[];
     createdAt: Date;
@@ -45,7 +46,7 @@ interface JobsTableProps {
     jobs: JobWithCompany[];
 }
 
-type FilterType = "location" | "tech" | "remotePolicy";
+type FilterType = "location" | "tech" | "remotePolicy" | "employmentType";
 
 type Filter = {
     id: string;
@@ -76,6 +77,14 @@ export default function JobsTable({ jobs }: JobsTableProps) {
     ).sort();
 
     const remotePolicyOptions = ["Remote", "Hybrid", "On-Site"];
+
+    const employmentTypeOptions = [
+        { value: "full_time", label: "Full Time" },
+        { value: "part_time", label: "Part Time" },
+        { value: "contract", label: "Contract" },
+        { value: "temporary", label: "Temporary" },
+        { value: "internship", label: "Internship" },
+    ];
 
     // Combine all suggestions with type labels
     type Suggestion = {
@@ -109,7 +118,13 @@ export default function JobsTable({ jobs }: JobsTableProps) {
             type: "remotePolicy" as FilterType,
             value: policy,
             label: policy,
-            displayLabel: `Type: ${policy}`,
+            displayLabel: `Work Type: ${policy}`,
+        })),
+        ...employmentTypeOptions.map((empType) => ({
+            type: "employmentType" as FilterType,
+            value: empType.value,
+            label: empType.label,
+            displayLabel: `Employment: ${empType.label}`,
         })),
     ];
 
@@ -179,6 +194,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
         const locationFilters = filters.filter((f) => f.type === "location");
         const techFilters = filters.filter((f) => f.type === "tech");
         const remotePolicyFilters = filters.filter((f) => f.type === "remotePolicy");
+        const employmentTypeFilters = filters.filter((f) => f.type === "employmentType");
 
         // Check location filters (OR logic)
         if (locationFilters.length > 0) {
@@ -210,6 +226,14 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                 return false;
             });
             if (!matchesRemotePolicy) return false;
+        }
+
+        // Check employment type filters (OR logic)
+        if (employmentTypeFilters.length > 0) {
+            const matchesEmploymentType = employmentTypeFilters.some((filter) =>
+                job.employmentType === filter.value
+            );
+            if (!matchesEmploymentType) return false;
         }
 
         return true;
@@ -313,7 +337,13 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                                 className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-800 border border-emerald-200"
                             >
                                 <span className="text-xs text-emerald-600 uppercase">
-                                    {filter.type === "location" ? "Location" : filter.type === "tech" ? "Tech" : "Type"}:
+                                    {filter.type === "location"
+                                        ? "Location"
+                                        : filter.type === "tech"
+                                            ? "Tech"
+                                            : filter.type === "remotePolicy"
+                                                ? "Work Type"
+                                                : "Employment"}:
                                 </span>
                                 {filter.label}
                                 <button
@@ -352,7 +382,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                         onKeyDown={handleKeyDown}
                         onFocus={() => setShowSuggestions(true)}
                         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                        placeholder="Filter by location, tech stack, or work type..."
+                        placeholder="Filter by location, tech stack, work type, or employment type..."
                         className="w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     />
                     {showSuggestions && filteredSuggestions.length > 0 && (
@@ -364,7 +394,13 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                                     className="w-full px-3 py-2 text-left text-sm text-stone-700 hover:bg-emerald-50 transition-colors"
                                 >
                                     <span className="font-medium text-emerald-600">
-                                        {suggestion.type === "location" ? "Location" : suggestion.type === "tech" ? "Tech" : "Type"}:
+                                        {suggestion.type === "location"
+                                            ? "Location"
+                                            : suggestion.type === "tech"
+                                                ? "Tech"
+                                                : suggestion.type === "remotePolicy"
+                                                    ? "Work Type"
+                                                    : "Employment"}:
                                     </span>{" "}
                                     {suggestion.label}
                                 </button>

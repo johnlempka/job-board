@@ -30,6 +30,7 @@ export async function getJobs(): Promise<JobWithCompany[]> {
         ...job,
         locations: job.locations as JobModel["locations"],
         remotePolicy: job.remotePolicy as JobModel["remotePolicy"],
+        employmentType: job.employmentType as JobModel["employmentType"],
         perks: job.perks || [],
         benefits: job.benefits || [],
         company: {
@@ -55,6 +56,7 @@ export async function getJob(id: string): Promise<JobDetail | null> {
         ...job,
         locations: job.locations as JobModel["locations"],
         remotePolicy: job.remotePolicy as JobModel["remotePolicy"],
+        employmentType: job.employmentType as JobModel["employmentType"],
         perks: job.perks || [],
         benefits: job.benefits || [],
         company: {

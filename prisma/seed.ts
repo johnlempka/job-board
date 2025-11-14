@@ -3,6 +3,22 @@ import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
+// Helper function to generate employment type
+function generateEmploymentType(): string {
+    const types = ["full_time", "part_time", "contract", "temporary", "internship"];
+    // Weight full_time more heavily
+    const weights = [0.7, 0.1, 0.1, 0.05, 0.05];
+    const random = Math.random();
+    let cumulative = 0;
+    for (let i = 0; i < types.length; i++) {
+        cumulative += weights[i];
+        if (random < cumulative) {
+            return types[i];
+        }
+    }
+    return "full_time";
+}
+
 // Helper function to generate perks and benefits
 function generatePerksAndBenefits(
     companySize: string,
@@ -533,6 +549,7 @@ async function main() {
                     responsibilities,
                     perks,
                     benefits,
+                    employmentType: generateEmploymentType(),
                     companyId: company.id,
                     locations: jobData.locations as any,
                     createdAt: postedDate,

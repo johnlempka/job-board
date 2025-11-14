@@ -1,5 +1,7 @@
 export type RemotePolicy = "remote" | "hybrid" | "in_office";
 
+export type EmploymentType = "full_time" | "part_time" | "contract" | "temporary" | "internship";
+
 export type LocationModel = {
     city: string;
     state: string;
@@ -17,6 +19,7 @@ export type JobModel = {
     locations: LocationModel[];
     url: string;
     remotePolicy: RemotePolicy;
+    employmentType: EmploymentType;
     daysPerWeek: number | null;
     techStack: string[];
     createdAt: Date;

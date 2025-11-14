@@ -26,6 +26,7 @@ model Job {
   locations        Json
   url              String
   remotePolicy     String
+  employmentType   String
   daysPerWeek      Int?
   techStack        String[]
   chats            Chat[]

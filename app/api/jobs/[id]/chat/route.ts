@@ -21,10 +21,11 @@ async function getGeminiResponse(
     const systemPrompt = `You are a helpful assistant that answers questions about job postings. Your task is to help job seekers understand:
 
 1. The job requirements, responsibilities, and expectations
-2. Details about the company, culture, and benefits
-3. Technical requirements and skills needed
-4. Location and remote work policies
-5. Any other relevant information about the position or company
+2. Employment type (full-time, part-time, contract, temporary, internship)
+3. Details about the company, culture, benefits, and perks
+4. Technical requirements and skills needed
+5. Location and remote work policies
+6. Any other relevant information about the position or company
 
 You should be friendly, professional, and provide accurate information based solely on the job and company information provided to you. If you don't have information to answer a question, say so clearly.
 
@@ -184,9 +185,12 @@ export async function POST(
             description: job.description,
             requirements: job.requirements,
             responsibilities: job.responsibilities,
+            perks: job.perks || [],
+            benefits: job.benefits || [],
             locations: job.locations,
             url: job.url,
             remotePolicy: job.remotePolicy,
+            employmentType: job.employmentType,
             daysPerWeek: job.daysPerWeek,
             techStack: job.techStack,
             createdAt: job.createdAt,
