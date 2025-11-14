@@ -27,6 +27,8 @@ model Job {
   url              String
   remotePolicy     String
   employmentType   String
+  salaryMin        Int?
+  salaryMax        Int?
   daysPerWeek      Int?
   techStack        String[]
   chats            Chat[]

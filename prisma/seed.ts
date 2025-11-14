@@ -19,6 +19,39 @@ function generateEmploymentType(): string {
     return "full_time";
 }
 
+function roundToNearest(value: number, increment: number = 5000): number {
+    return Math.round(value / increment) * increment;
+}
+
+function generateSalaryRange(employmentType: string): { salaryMin: number; salaryMax: number } {
+    const baseRanges: Record<string, { min: number; max: number }> = {
+        full_time: { min: 90000, max: 180000 },
+        contract: { min: 100000, max: 220000 },
+        part_time: { min: 45000, max: 90000 },
+        temporary: { min: 60000, max: 110000 },
+        internship: { min: 30000, max: 50000 },
+    };
+
+    const spreadRanges: Record<string, { min: number; max: number }> = {
+        full_time: { min: 15000, max: 60000 },
+        contract: { min: 20000, max: 70000 },
+        part_time: { min: 5000, max: 20000 },
+        temporary: { min: 5000, max: 25000 },
+        internship: { min: 2000, max: 8000 },
+    };
+
+    const bounds = baseRanges[employmentType] ?? baseRanges.full_time;
+    const spreads = spreadRanges[employmentType] ?? spreadRanges.full_time;
+
+    const baseMin = faker.number.int({ min: bounds.min, max: bounds.max });
+    const salaryMin = roundToNearest(baseMin);
+
+    const spread = faker.number.int({ min: spreads.min, max: spreads.max });
+    const salaryMax = roundToNearest(Math.max(salaryMin + spread, salaryMin + 5000));
+
+    return { salaryMin, salaryMax };
+}
+
 // Helper function to generate perks and benefits
 function generatePerksAndBenefits(
     companySize: string,
@@ -541,6 +574,9 @@ async function main() {
                 company.ownershipType
             );
 
+            const employmentType = generateEmploymentType();
+            const { salaryMin, salaryMax } = generateSalaryRange(employmentType);
+
             await prisma.job.create({
                 data: {
                     ...jobData,
@@ -549,7 +585,9 @@ async function main() {
                     responsibilities,
                     perks,
                     benefits,
-                    employmentType: generateEmploymentType(),
+                    employmentType,
+                    salaryMin,
+                    salaryMax,
                     companyId: company.id,
                     locations: jobData.locations as any,
                     createdAt: postedDate,

@@ -6,7 +6,7 @@ import type { JobModel } from "../models/types";
 import { routes } from "../lib/routes";
 import CompanyLogo from "./CompanyLogo";
 
-type SortField = "title" | "company" | "remotePolicy" | "location" | "createdAt";
+type SortField = "title" | "company" | "remotePolicy" | "location" | "createdAt" | "salary";
 type SortDirection = "asc" | "desc";
 
 function formatLocation(locations: { city: string; state: string }[]): string {
@@ -22,12 +22,39 @@ function formatRemotePolicy(policy: string, daysPerWeek: number | null): string 
         case "remote":
             return "Remote";
         case "hybrid":
-            return `Hybrid (${daysPerWeek}d/w)`;
+            return daysPerWeek
+                ? `Hybrid (${daysPerWeek}d/w)`
+                : "Hybrid";
         case "in_office":
             return "On-Site";
         default:
             return policy;
     }
+}
+
+function formatSalaryRange(min: number | null, max: number | null): string {
+    const formatValue = (value: number) =>
+        `$${(value / 1000).toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        })}k`;
+
+    const hasMin = typeof min === "number";
+    const hasMax = typeof max === "number";
+
+    if (hasMin && hasMax) {
+        if (min === max) {
+            return `${formatValue(min)} / yr`;
+        }
+        return `${formatValue(min)} - ${formatValue(max)} / yr`;
+    }
+    if (hasMin) {
+        return `From ${formatValue(min)} / yr`;
+    }
+    if (hasMax) {
+        return `Up to ${formatValue(max)} / yr`;
+    }
+    return "Not provided";
 }
 
 type JobWithCompany = {
@@ -37,6 +64,8 @@ type JobWithCompany = {
     locations: JobModel["locations"];
     remotePolicy: JobModel["remotePolicy"];
     employmentType: JobModel["employmentType"];
+    salaryMin: JobModel["salaryMin"];
+    salaryMax: JobModel["salaryMax"];
     daysPerWeek: number | null;
     techStack: string[];
     createdAt: Date;
@@ -240,8 +269,8 @@ export default function JobsTable({ jobs }: JobsTableProps) {
     });
 
     const sortedJobs = [...filteredJobs].sort((a, b) => {
-        let aValue: string | Date;
-        let bValue: string | Date;
+        let aValue: string | Date | number;
+        let bValue: string | Date | number;
 
         switch (sortField) {
             case "title":
@@ -263,6 +292,10 @@ export default function JobsTable({ jobs }: JobsTableProps) {
             case "createdAt":
                 aValue = a.createdAt;
                 bValue = b.createdAt;
+                break;
+            case "salary":
+                aValue = a.salaryMin ?? a.salaryMax ?? 0;
+                bValue = b.salaryMin ?? b.salaryMax ?? 0;
                 break;
             default:
                 return 0;
@@ -460,6 +493,15 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                                     <SortIcon field="remotePolicy" />
                                 </div>
                             </th>
+                            <th
+                                className="cursor-pointer px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-600 hover:opacity-70 transition-opacity"
+                                onClick={() => handleSort("salary")}
+                            >
+                                <div className="flex items-center gap-2">
+                                    Salary
+                                    <SortIcon field="salary" />
+                                </div>
+                            </th>
                             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-600">
                                 Tech Stack
                             </th>
@@ -506,6 +548,9 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                                 </td>
                                 <td className="px-6 py-4 text-sm text-stone-700">
                                     {formatRemotePolicy(job.remotePolicy, job.daysPerWeek)}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-stone-800 font-medium">
+                                    {formatSalaryRange(job.salaryMin, job.salaryMax)}
                                 </td>
                                 <td className="px-6 py-4 text-sm">
                                     <div className="flex flex-wrap gap-2">

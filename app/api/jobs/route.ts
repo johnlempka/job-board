@@ -27,6 +27,8 @@ export async function GET() {
             url: job.url,
             remotePolicy: job.remotePolicy as JobModel["remotePolicy"],
             employmentType: job.employmentType as JobModel["employmentType"],
+            salaryMin: job.salaryMin,
+            salaryMax: job.salaryMax,
             daysPerWeek: job.daysPerWeek,
             techStack: job.techStack,
             createdAt: job.createdAt,

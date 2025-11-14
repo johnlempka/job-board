@@ -60,6 +60,8 @@ const baseJob = {
     url: "https://acme.example.com/jobs/senior-software-engineer",
     remotePolicy: "remote",
     employmentType: "full_time",
+    salaryMin: 120_000,
+    salaryMax: 150_000,
     daysPerWeek: 5,
     techStack: ["TypeScript", "Next.js"],
     createdAt: baseDate,
@@ -75,6 +77,8 @@ test("getJobs returns normalized listings with defaults", async () => {
     assert.equal(jobs.length, 1);
     assert.deepEqual(jobs[0].perks, []);
     assert.deepEqual(jobs[0].benefits, []);
+    assert.equal(jobs[0].salaryMin, baseJob.salaryMin);
+    assert.equal(jobs[0].salaryMax, baseJob.salaryMax);
     assert.deepEqual(jobs[0].company, {
         name: baseCompany.name,
         logo: baseCompany.logo,
@@ -88,6 +92,8 @@ test("getJob returns detailed record with company metadata", async () => {
 
     assert.ok(job);
     assert.equal(job?.title, baseJob.title);
+    assert.equal(job?.salaryMin, baseJob.salaryMin);
+    assert.equal(job?.salaryMax, baseJob.salaryMax);
     assert.deepEqual(job?.perks, []);
     assert.deepEqual(job?.benefits, []);
     assert.deepEqual(job?.company, {

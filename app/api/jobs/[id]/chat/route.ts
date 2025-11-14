@@ -191,6 +191,8 @@ export async function POST(
             url: job.url,
             remotePolicy: job.remotePolicy,
             employmentType: job.employmentType,
+            salaryMin: job.salaryMin,
+            salaryMax: job.salaryMax,
             daysPerWeek: job.daysPerWeek,
             techStack: job.techStack,
             createdAt: job.createdAt,

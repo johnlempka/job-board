@@ -39,6 +39,34 @@ function formatEmploymentType(employmentType: string): string {
     }
 }
 
+function formatSalaryRange(salaryMin: number | null, salaryMax: number | null): string {
+    const formatValue = (value: number) =>
+        `$${(value / 1000).toLocaleString("en-US", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        })}k`;
+
+    const hasMin = typeof salaryMin === "number";
+    const hasMax = typeof salaryMax === "number";
+
+    if (hasMin && hasMax) {
+        if (salaryMin === salaryMax) {
+            return `${formatValue(salaryMin)} / year`;
+        }
+        return `${formatValue(salaryMin)} - ${formatValue(salaryMax)} / year`;
+    }
+
+    if (hasMin) {
+        return `From ${formatValue(salaryMin)} / year`;
+    }
+
+    if (hasMax) {
+        return `Up to ${formatValue(salaryMax)} / year`;
+    }
+
+    return "Not provided";
+}
+
 function formatDate(date: Date): string {
     return new Date(date).toLocaleDateString("en-US", {
         year: "numeric",
@@ -123,6 +151,22 @@ export default async function JobPage({
                                             ? job.locations.map(formatLocation).join(", ")
                                             : "Location TBD"}
                                     </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <svg
+                                        className="h-5 w-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3m0-6c1.657 0 3 1.343 3 3s-1.343 3-3 3m0-6V5m0 9v5M5 9h14M5 15h14"
+                                        />
+                                    </svg>
+                                    <span>{formatSalaryRange(job.salaryMin, job.salaryMax)}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <svg

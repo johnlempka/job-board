@@ -20,6 +20,8 @@ export type JobModel = {
     url: string;
     remotePolicy: RemotePolicy;
     employmentType: EmploymentType;
+    salaryMin: number | null;
+    salaryMax: number | null;
     daysPerWeek: number | null;
     techStack: string[];
     createdAt: Date;
