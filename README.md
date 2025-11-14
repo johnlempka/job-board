@@ -2,6 +2,10 @@
 
 This repository contains a Next.js (App Router) job board backed by a PostgreSQL database accessed through Prisma. Follow the steps below to set up and run the project from scratch.
 
+### Live demo
+
+Visit the deployed build at <https://job-board-woad-five.vercel.app/>.
+
 ### Feature overview
 
 - Job detail route that mirrors the interview requirements: rich posting data plus an AI chat box that remembers prior turns.
