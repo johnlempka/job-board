@@ -387,7 +387,7 @@ export default async function JobPage({
 
                         {/* Mobile Chat - shown below job details on small screens */}
                         <div className="lg:hidden">
-                            <div className="h-[500px]">
+                            <div className="h-[500px] overflow-hidden rounded-3xl bg-slate-900 shadow-2xl shadow-emerald-900/30 ring-1 ring-slate-700/60">
                                 <JobChat jobId={job.id} jobTitle={job.title} />
                             </div>
                         </div>

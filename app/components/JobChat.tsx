@@ -114,7 +114,7 @@ export default function JobChat({ jobId, jobTitle }: JobChatProps) {
     }
 
     return (
-        <div className="flex h-full flex-col text-stone-200">
+        <div className="flex h-full flex-col bg-slate-900 text-stone-200">
             <div className="border-b border-stone-600/50 p-4">
                 <div className="flex items-center gap-3">
                     <div className="flex-shrink-0 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 p-2.5 shadow-lg shadow-emerald-900/40">
