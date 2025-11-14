@@ -40,8 +40,12 @@ body {
   --accent-green-dark: #047857;
 }
 
-/* Enhanced visual effects for accent elements */
+/* Custom beige background color */
 @layer utilities {
+  .bg-beige {
+    background-color: #f5f1eb;
+  }
+
   .accent-glow {
     box-shadow: 0 0 12px rgba(5, 150, 105, 0.3);
   }

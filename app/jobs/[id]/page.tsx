@@ -4,18 +4,6 @@ import JobChat from "@/app/components/JobChat";
 import CompanyLogo from "@/app/components/CompanyLogo";
 import { getJob } from "@/app/lib/services/jobs";
 import { routes } from "@/app/lib/routes";
-import { Inter, Playfair_Display } from "next/font/google";
-
-const inter = Inter({
-    subsets: ["latin"],
-    variable: "--font-inter",
-});
-
-const playfair = Playfair_Display({
-    subsets: ["latin"],
-    variable: "--font-playfair",
-    weight: ["400", "600", "700"],
-});
 
 function formatLocation(location: { city: string; state: string }): string {
     return `${location.city}, ${location.state}`;
@@ -55,7 +43,7 @@ export default async function JobPage({
     }
 
     return (
-        <div className={`${inter.variable} ${playfair.variable} flex min-h-screen bg-stone-50`}>
+        <div className="flex min-h-screen bg-beige">
             {/* Left side - Job Details */}
             <main className="flex-1 overflow-y-auto">
                 <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">

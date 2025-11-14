@@ -1,24 +1,12 @@
 import JobsTable from "./components/JobsTable";
 import { getJobs } from "./lib/services/jobs";
 import { routes } from "./lib/routes";
-import { Inter, Playfair_Display } from "next/font/google";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  weight: ["400", "600", "700"],
-});
 
 export default async function Home() {
   const jobs = await getJobs();
 
   return (
-    <div className={`${inter.variable} ${playfair.variable} min-h-screen bg-stone-50`}>
+    <div className="min-h-screen bg-beige">
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-12">
           <h1 className={`text-5xl font-bold text-stone-900 font-playfair relative inline-block`}>
